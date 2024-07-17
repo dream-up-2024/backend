@@ -10,6 +10,8 @@ class Settings():
   MYSQL_USER = os.environ.get("MYSQL_USER")
   MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD")
   MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE")
+  SECRET_KEY = os.environ.get("SECRET_KEY")
+  ALGORITHM = os.environ.get("ALGORITHM")
   
 
 @lru_cache
