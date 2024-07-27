@@ -3,18 +3,8 @@ from database import Base
 from datetime import datetime
 
 
-class Users(Base):
-    __tablename__ = "uesr"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(String(20), unique=True, nullable=False)
-    password = Column(String(100), nullable=False)
-    email = Column(String(50), unique=True, nullable=False)
-    name = Column(String(10), nullable=False)
-
-
-class Members(Base):
-    __tablename__ = "members"
+class User(Base):
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(10), nullable=False)
@@ -23,9 +13,31 @@ class Members(Base):
     disabled_level = Column(String(50), nullable=False)
     address = Column(Text, nullable=False)
     issued_date = Column(String(10), nullable=False)
-    expiration_period = Column(String(10), nullable=False)
-    signed_date = Column(DateTime, default=datetime.now(), nullable=False)
+    expriration_period = Column(String(10), nullable=False)
+    signed_date = Column(DateTime, nullable=False)
     email = Column(String(50), unique=True, nullable=False)
     password = Column(String(100), nullable=False)
-    updated_at = Column(DateTime, default=datetime.now(), nullable=False, onupdate=datetime.now())
+    updated_date = Column(DateTime, nullable=False, default=datetime.now(), onupdate=datetime.now())
 
+class Certificate(Base):
+    __tablename__ = "certificates"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(100), unique=True, nullable=False)
+
+class Notice(Base):
+    __tablename__ = "notices"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    office = Column(String(100), nullable=False)
+    title = Column(Text, nullable=False)
+    url = Column(Text, nullable=False)
+    description = Column(Text, nullable=False)
+    career = Column(String(50), nullable=False)
+    education = Column(String(50), nullable=False)
+    address = Column(Text, nullable=False)
+    register = Column(String(50), nullable=False)
+    deadline = Column(String(50), nullable=False)
+    contract = Column(Text, nullable=False)
+    working_day = Column(String(50), nullable=False)
+    work_week = Column(String(50), nullable=False, default = '')

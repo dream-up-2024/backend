@@ -3,3 +3,6 @@ __pycache__/*
 .env
 
 dockerfile
+memo.py
+
+z_data_store/*
