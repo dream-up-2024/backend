@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime
+from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, ForeignKey
+from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
 
@@ -19,11 +20,23 @@ class User(Base):
     password = Column(String(100), nullable=False)
     updated_date = Column(DateTime, nullable=False, default=datetime.now(), onupdate=datetime.now())
 
+
+class UserResume(Base):
+    __tablename__ = "user_resume"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_email = Column(String(50))
+    version = Column(Integer, nullable=False)
+    created_date = Column(DateTime, nullable=False, default=datetime.now())
+    content = Column(JSON, nullable=False, default="")
+
+
 class Certificate(Base):
     __tablename__ = "certificates"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), unique=True, nullable=False)
+
 
 class Notice(Base):
     __tablename__ = "notices"
