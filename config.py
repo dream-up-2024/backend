@@ -12,7 +12,10 @@ class Settings():
   MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE")
   SECRET_KEY = os.environ.get("SECRET_KEY")
   ALGORITHM = os.environ.get("ALGORITHM")
-  
+  OCR_API_URL = os.environ.get("OCR_API_URL")
+  OCR_SECRET_KEY = os.environ.get("OCR_SECRET_KEY")
+  OCR_TEMPLET_IDS = os.environ.get("OCR_TEMPLET_IDS")
+
 
 @lru_cache
 def get_settings():

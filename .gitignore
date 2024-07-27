@@ -6,3 +6,4 @@ dockerfile
 memo.py
 
 z_data_store/*
+test_*
