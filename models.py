@@ -8,24 +8,37 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(10), nullable=False)
-    birth = Column(String(10), nullable=False)
-    disabled_type = Column(String(50), nullable=False)
-    disabled_level = Column(String(50), nullable=False)
-    address = Column(Text, nullable=False)
-    issued_date = Column(String(10), nullable=False)
-    expiration_period = Column(String(10), nullable=False)
-    signed_date = Column(DateTime, nullable=False, default=datetime.now())
+    name = Column(String(10), nullable=False, default="")
+    birth = Column(String(10), nullable=False, default="")
+    disabled_type = Column(String(50), nullable=False, default="")
+    disabled_level = Column(String(50), nullable=False, default="")
+    address = Column(Text, nullable=False, default="")
+    issued_date = Column(String(10), nullable=False, default="")
+    expiration_period = Column(String(10), nullable=False, default="")
     email = Column(String(50), unique=True, nullable=False)
+    signed_date = Column(DateTime, nullable=False, default=datetime.now())
     password = Column(String(100), nullable=False)
     updated_date = Column(DateTime, nullable=False, default=datetime.now(), onupdate=datetime.now())
 
 
+# 이력서
 class UserResume(Base):
     __tablename__ = "user_resume"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_email = Column(String(50))
+    version = Column(Integer, nullable=False)
+    created_date = Column(DateTime, nullable=False, default=datetime.now())
+    content = Column(JSON, nullable=False, default="")
+
+
+# 자기소개서
+class UserCoverLetter(Base):
+    __tablename__ = "user_cover_letter"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_email = Column(String(50))
+    type = Column(Integer, nullable=False)   # 지원 동기/성격의 장단점
     version = Column(Integer, nullable=False)
     created_date = Column(DateTime, nullable=False, default=datetime.now())
     content = Column(JSON, nullable=False, default="")

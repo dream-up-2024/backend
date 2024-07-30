@@ -4,5 +4,12 @@ from typing import Any, Dict
 
 
 class UserResumeCreate(BaseModel):
-    email: str
     content: Dict[str, Any]
+
+
+class UserCoverLetterCreate(BaseModel):
+    type: str
+    content: Dict[str, Any]
+
+    class Config:
+        orm_mode = True
