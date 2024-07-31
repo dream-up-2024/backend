@@ -75,6 +75,7 @@ def get_user_resume(db: Session, user_email):
     resume = db.query(UserResume).filter(UserResume.user_email == user_email).order_by(desc(UserResume.version)).first()
     return resume
 
+# 유저 별 자기소개서 추가
 def get_user_cover_letter(db: Session, user_email):
     # 1: 지원동기: Motivation for Application / 2: 성장배경: Background and Growth / 3: 성격의 장단점: Strengths and Weaknesses of Personality
     motivation = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "1")).order_by(desc(UserCoverLetter.version)).first()

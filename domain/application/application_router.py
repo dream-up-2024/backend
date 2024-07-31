@@ -42,9 +42,16 @@ def resume_get(user_email: str, db: Session = Depends(get_db)):
 
 
 # email="ryeonk"
-# 자기소개서 작성
+# 자기소개서 반환
 @router.get("/cover-letter/{user_email}", status_code=200)
 def cover_letter_get(user_email: str, db: Session = Depends(get_db)):
     data = application_crud.get_user_cover_letter(db=db, user_email=user_email)
     return data
 
+
+# 지원서 반환
+@router.get("/personal/{user_email}", status_code=200)
+def cover_letter_get(user_email: str, db: Session = Depends(get_db)):
+    # data = application_crud.get_user_cover_letter(db=db, user_email=user_email)
+    # return data
+    return user_email
