@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from domain.user import user_router
 from domain.application import application_router
 from domain.certificate import certificate_router
+from domain.notice import notice_router
 
 app = FastAPI()
 
@@ -23,6 +24,7 @@ app.add_middleware(
 app.include_router(user_router.router)
 app.include_router(application_router.router)
 app.include_router(certificate_router.router)
+app.include_router(notice_router.router)
 
 # @app.get("/")
 # def root():

@@ -55,15 +55,31 @@ class Notice(Base):
     __tablename__ = "notices"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    office = Column(String(100), nullable=False)
+    company = Column(String(100), nullable=False)
     title = Column(Text, nullable=False)
+    job_type = Column(Text, nullable=False)
     url = Column(Text, nullable=False)
-    description = Column(Text, nullable=False)
-    career = Column(String(50), nullable=False)
+    work_experience = Column(String(50), nullable=False)
     education = Column(String(50), nullable=False)
-    address = Column(Text, nullable=False)
-    register = Column(String(50), nullable=False)
+    address1 = Column(Text, nullable=False)
+    address2 = Column(Text, nullable=False)
+    working_hour = Column(String(50), nullable=False)
     deadline = Column(String(50), nullable=False)
-    contract = Column(Text, nullable=False)
-    working_day = Column(String(50), nullable=False)
-    work_week = Column(String(50), nullable=False, default = '')
+
+
+# class Notice(Base):
+#     __tablename__ = "before_notices"
+
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     office = Column(String(100), nullable=False)
+#     title = Column(Text, nullable=False)
+#     url = Column(Text, nullable=False)
+#     description = Column(Text, nullable=False)
+#     career = Column(String(50), nullable=False)
+#     education = Column(String(50), nullable=False)
+#     address = Column(Text, nullable=False)
+#     register = Column(String(50), nullable=False)
+#     deadline = Column(String(50), nullable=False)
+#     contract = Column(Text, nullable=False)
+#     working_day = Column(String(50), nullable=False)
+#     work_week = Column(String(50), nullable=False, default = '')
