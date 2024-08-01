@@ -5,10 +5,12 @@ from starlette import status
 from typing import Optional
 
 from models import User
-from domain.user.user_router import get_current_user
+# from domain.user.user_router import get_current_user
 from config import settings
 from database import SessionLocal, get_db
 from domain.application import application_crud, application_schema
+
+import json
 
 router = APIRouter(
     prefix="/api/application",
@@ -25,12 +27,15 @@ def resume_create(user_email: str, _resume_create: application_schema.UserResume
 
 # email="ryeonk"
 # 자기소개서 작성
-@router.post("/cover-letter/{user_email}/{type}", status_code=200)
-def cover_letter_create(user_email: str, type: int, _cover_letter_create: application_schema.UserCoverLetterCreate, 
+@router.post("/cover-letter/{user_email}", status_code=200)
+def cover_letter_create(user_email: str, 
+                        _cover_letter_create: application_schema.UserCoverLetterCreate, 
                         db: Session = Depends(get_db)):
                         # q: Optional[str] = None):
                         # user_email: str = ''):
-    data = application_crud.create_user_cover_letter(db=db, cover_letter_create=_cover_letter_create, user_email=user_email, type=type)
+    print(_cover_letter_create.type)
+    print(_cover_letter_create.content)
+    data = application_crud.create_user_cover_letter(db=db, cover_letter_create=_cover_letter_create, user_email=user_email)
     return data
 
 

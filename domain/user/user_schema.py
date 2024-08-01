@@ -12,6 +12,13 @@ class UploadImage(BaseModel):
 
 
 class UserCreate(BaseModel):
+    name: str
+    birth: str
+    disabled_type: str
+    disabled_level: str
+    address: str
+    issued_date: str
+    expiration_period: str
     email: str
     password: str
     

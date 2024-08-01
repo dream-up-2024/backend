@@ -25,7 +25,7 @@ def get_recommand_notice(db: Session, user_email):
         recommand_job_3 = user.recommand_job_3
 
         if recommand_job_1 == '' and recommand_job_2 == '' and recommand_job_3 == '':
-            return db.query(Notice).order_by(Notice.deadline).all()
+            return db.query(Notice).filter(Notice.address1 , Notice.address2).order_by(Notice.deadline).all()
 
         return db.query(Notice).filter(Notice.job_type.in_(recommand_job_1, recommand_job_2, recommand_job_3)).order_by(Notice.deadline).all()
     except:

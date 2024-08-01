@@ -44,7 +44,7 @@ class UserCoverLetter(Base):
     type = Column(Integer, nullable=False)   # 지원 동기/성격의 장단점
     version = Column(Integer, nullable=False)
     created_date = Column(DateTime, nullable=False, default=datetime.now())
-    content = Column(JSON, nullable=False, default="")
+    content = Column(Text, nullable=False, default="")
 
 
 class Certificate(Base):

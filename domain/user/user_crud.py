@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from domain.user.user_schema import UserCreate
 from models import User
+# from domain.gptapi import recommand
 
 from config import settings
 
@@ -25,15 +26,15 @@ OCR_TEMPLET_IDS = [31277, 31278]
 
 def create_user(db: Session, user_create: UserCreate):
     db_user = User(
-                    # name=user_create.name,
-                #    birth=user_create.birth,
-                #    disabled_type=user_create.disabled_type,
-                #    disabled_level=user_create.disabled_level,
-                #    address=user_create.address,
-                #    issued_date=user_create.issued_date,
-                #    expiration_period=user_create.expiration_period,
+                    name=user_create.name,
+                    birth=user_create.birth,
+                    disabled_type=user_create.disabled_type,
+                    disabled_level=user_create.disabled_level,
+                    address=user_create.address,
+                    issued_date=user_create.issued_date,
+                    expiration_period=user_create.expiration_period,
                     email=user_create.email,
-                   password=pwd_context.hash(user_create.password),
+                    password=pwd_context.hash(user_create.password),
                    )
     
     db.add(db_user)
@@ -65,7 +66,7 @@ def change_str_datetime(date_str):
             return date_obj.strftime("%Y-%m-%d")
 
 # 텍스트 추출
-def get_text_to_image(encoded_string):
+def get_image_to_text(encoded_string):
 
     headers = {
         "Content-Type" : "application/json",
@@ -115,7 +116,7 @@ def get_text_to_image(encoded_string):
     else:
         data['name'] = text[0]
         data['birth'] = text[1].replace(".","")
-        if int(data['birth']) > 300000:
+        if data['birth'] > '300000':
             if text[2] == "남":
                 data['birth'] += "-1"
             else:

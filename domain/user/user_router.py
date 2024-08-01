@@ -70,22 +70,22 @@ def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_
 
 
 @router.post("/upload-image", status_code=200)
-async def upload_user_image(): #file: user_schema.UploadImage
+async def upload_user_image(_upload_image: user_schema.UploadImage): #file: user_schema.UploadImage
     # Base64 인코딩된 파일을 받아
     # 파일 형식 변경
-    # result_text = user_crud.get_text_to_image(file.file)
+    # print(_upload_image.file)
+    result_text = user_crud.get_image_to_text(_upload_image.file.split(",")[-1])
+    print(result_text)
 
-    # return {"data": result_text}
-    return 	{
-
-                "name": "홍길동",
-                "birth": "123456-1",
-                "disabled_level": "4급",
-                "address": "서울특별시 종로구",
-                "issued_date": "2015-12-31",
-                "expiration_period": "2011-06-14"
-
-            }
+    return {"data": result_text}
+    # return 	{
+    #             "name": "홍길동",
+    #             "birth": "123456-1",
+    #             "disabled_level": "4급",
+    #             "address": "서울특별시 종로구",
+    #             "issued_date": "2015-12-31",
+    #             "expiration_period": "2011-06-14"
+    #         }
 
 
 # 로그인
@@ -116,26 +116,53 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
     }
 
 
-def get_current_user(token: str = Depends(oauth2_scheme),
-                     db: Session = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+# user 데이터 업데이트
+@router.put("/information")
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
+                           db: Session = Depends(get_db)):
 
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            print("2---------------------")
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
-    else:
-        print("2---------------------")
-        user = user_crud.get_user(db, email=username)
-        print("3---------------------")
-        if user is None:
-            raise credentials_exception
-        return user
+    # check user and password
+    user = user_crud.get_user(db, form_data.username)
+    if not user or not pwd_context.verify(form_data.password, user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # make access token
+    data = {
+        "sub": user.email,
+        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    }
+    access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "email": user.email
+    }
+
+# def get_current_user(token: str = Depends(oauth2_scheme),
+#                      db: Session = Depends(get_db)):
+#     credentials_exception = HTTPException(
+#         status_code=status.HTTP_401_UNAUTHORIZED,
+#         detail="Could not validate credentials",
+#         headers={"WWW-Authenticate": "Bearer"},
+#     )
+
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         username: str = payload.get("sub")
+#         if username is None:
+#             print("2---------------------")
+#             raise credentials_exception
+#     except JWTError:
+#         raise credentials_exception
+#     else:
+#         print("2---------------------")
+#         user = user_crud.get_user(db, email=username)
+#         print("3---------------------")
+#         if user is None:
+#             raise credentials_exception
+#         return user

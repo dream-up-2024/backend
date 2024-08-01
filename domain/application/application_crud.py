@@ -2,6 +2,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, and_
 from domain.application.application_schema import UserResumeCreate, UserCoverLetterCreate
+from domain.gptapi import recommand
 from models import UserResume, UserCoverLetter, User
 
 # 이력서 생성
@@ -28,47 +29,43 @@ def create_user_resume(db: Session, resume_create: UserResumeCreate, user_email)
     db.commit()
 
 # 자기소개서 추가
-def create_user_cover_letter(db: Session, cover_letter_create: UserCoverLetterCreate, user_email, type):
-    # # 자기소개서 작성 요청
+def create_user_cover_letter(db: Session, cover_letter_create: UserCoverLetterCreate, user_email):
+    ## 자기소개서 작성 요청
     # 입력된 데이터
+    type = cover_letter_create.type
     input_data = cover_letter_create.content
-    
-    # 추가 데이터 가져오기
-    # user = db.query(User).filter(User.email == user_email)
-    # resume = db.query(UserResume).filter(UserResume.user_email == user_email).order_by(desc(UserResume.version)).first()
 
-    # question = {
-    #     "user_informaiton": {
-    #         "birth": user.birth,
-    #         "disabled_type": user.disabled_type,
-    #         "disabled_level": user.disabled_level,
-    #         "address": user.address
-    #     },
-    #     "user_resume": {
+    user = db.query(User).filter(User.email == user_email).one()
+    user_info = {
+            "birth": user.birth,
+            "disabled_type": user.disabled_type,
+            "disabled_level": user.disabled_level,
+        }
+    gpt_question = input_data
+    final_cover_letter = recommand.recommand_cover_letter(type, user_info, gpt_question)
 
-    #     }
-    # }
-    
-    # 작성된 자기소개서 저장 및 반환
+    # print(f"{version} = {user_email}")
     version = ""
     try:
-        latest_version = int(db.query(UserCoverLetter).filter(
-            and_(UserCoverLetter.user_email == cover_letter_create.user_email,
-                 UserCoverLetter.type == cover_letter_create.type)
-        ).order_by(desc(UserCoverLetter.version)).first().version)
+        latest_version = int(
+            db.query(UserCoverLetter)
+            .filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == type))
+            .order_by(desc(UserCoverLetter.version))
+            .first().version)
         version = latest_version + 1
     except:
         version = 1
 
-    print(f"{version} = {user_email}")
-
     db_cover_letter = UserCoverLetter(user_email=user_email,
                             type = type,
-                           version=version,
-                           content=cover_letter_create.content)
+                            version=version,
+                            content=final_cover_letter)
 
     db.add(db_cover_letter)
     db.commit()
+    
+    return final_cover_letter
+
 
 # 유저 별 이력서 내용 반환
 def get_user_resume(db: Session, user_email):
