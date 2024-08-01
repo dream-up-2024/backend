@@ -10,6 +10,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(10), nullable=False, default="")
     birth = Column(String(10), nullable=False, default="")
+    gender = Column(String(10), nullable=False, default="")
     disabled_type = Column(String(50), nullable=False, default="")
     disabled_level = Column(String(50), nullable=False, default="")
     address = Column(Text, nullable=False, default="")

@@ -33,8 +33,6 @@ def cover_letter_create(user_email: str,
                         db: Session = Depends(get_db)):
                         # q: Optional[str] = None):
                         # user_email: str = ''):
-    print(_cover_letter_create.type)
-    print(_cover_letter_create.content)
     data = application_crud.create_user_cover_letter(db=db, cover_letter_create=_cover_letter_create, user_email=user_email)
     return data
 

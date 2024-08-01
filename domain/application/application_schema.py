@@ -4,7 +4,6 @@ from typing import Any, Dict
 
 
 class UserResumeCreate(BaseModel):
-    type: str
     content: Dict[str, Any]
 
 

@@ -33,9 +33,9 @@ class GptAPI():
         # return self.messages.append({"role": "system", "content": result})
         return result
 
-def start_recommand_job(email):
+def start_recommand_job(data):
     db = get_db
-    model = "gpt-3.5-turbo"
+    model = "gpt-4o-mini"
 
     job_list = ["건물 청소원(공공건물,아파트,사무실,병원,상가,공장 등)",
                 "기타 보건·의료 서비스 종사원",
@@ -45,54 +45,19 @@ def start_recommand_job(email):
                 "상담 전문가",
                 "웹 디자이너",
                 "재가 요양보호사"]
+    
 
-    text = "아래 취업을 원하는 장애인 정보가 user_info 변수에 json 형식으로 있어. 이 사람에게 맞는 직무 3개를 job_list 변수 값들 중 추천해줘."
+    text = f"{data}\n"
+    text += "위에는 취업을 원하는 장애인에 대한 데이터야. 이 사람에게 맞는 직무 3개를 아래 리스트 값들 중에서 추천해줘.\n"
+    text += f"{job_list}"
     text += "결과는 리스트만 반환해줘."
-    
-    try:
-        user = db.query(User).filter(User.email == email).one()
-    except:
-        return False
-    
-    try:
-        user_resume = db.query(UserResume).filter(UserResume.user_email == email).order_by(desc(UserResume.version)).first()
-    except:
-        user_resume = ""
-    
-    try:
-        user_cover_letter = db.query(UserCoverLetter).filter(UserCoverLetter.user_email == email).order_by(desc(UserCoverLetter.version)).first()    
-    except:
-        user_cover_letter = ""
-
-    print(user)
-    # user_info = {
-    #     "email": "ryeon@dreamup.com",
-    #     "content": {
-    #         "personal_info": {
-    #             "gender": "여자",
-    #             "birth": "1997-02-18",
-    #             "disabled_type": "지체장애",
-    #             "disabled_level": "1급"
-    #         },
-    #         "residence": "경기도 수원시",
-    #         "school": {
-    #             "school_name": "경기대학교",
-    #             "enrollment_period": "21.03 ~ 재학중"
-    #         },
-    #         "work_experience": [
-    #             {
-    #                 "company_name": "CJ ENM",
-    #                 "employment_period": "23.06 ~ 23.12"
-    #             }
-    #         ]
-    #     }
-    # }
 
     # 답변 요청
-    # gpt = GptAPI(model, client)
-    # msg = gpt.get_message(f"{text}\nuser_info={user_info}\njob_list={job_list}")
-    # result_msg = msg[1:-1].replace("'", "").split(", ")
+    gpt = GptAPI(model, client)
+    msg = gpt.get_message(text)
+    result_msg = msg[1:-1].replace("'", "").split(", ")
     # print(result_msg)
+    return result_msg
 
 
 def recommand_cover_letter(type, user, answer):
@@ -132,7 +97,7 @@ def recommand_cover_letter(type, user, answer):
 
     model = "gpt-4o-mini"
     
-    text = "user_info, question, answer 변수는 각각 취업을 원하는 정보, 취업 준비생에게 질문한 내용, 취업 준비생이 답변 내용이 있어."
+    text = "user_info, question, answer 변수는 각각 취업을 원하는 장애인의 정보, 취업 준비생에게 질문한 내용, 취업 준비생이 답변 내용이 있어."
     text += f"지원서에 제출에 사용 할 {type}을 띄어쓰기를 제외하고 450글자 이상 500글자 이하로 한국어로만 작성해주고, 결과는 {type}만 반환해줘.\n"
 
     text += f"user_info={user}\n"
@@ -145,4 +110,3 @@ def recommand_cover_letter(type, user, answer):
     gpt = GptAPI(model, client)
     msg = gpt.get_message(f"{text}\n")
     return msg
-
