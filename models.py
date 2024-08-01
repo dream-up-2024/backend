@@ -30,7 +30,7 @@ class UserResume(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_email = Column(String(50))
-    version = Column(Integer, nullable=False)
+    version = Column(String(50), nullable=False)
     created_date = Column(DateTime, nullable=False, default=datetime.now())
     content = Column(JSON, nullable=False, default="")
 
@@ -41,7 +41,7 @@ class UserCoverLetter(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_email = Column(String(50))
-    type = Column(Integer, nullable=False)   # 지원 동기/성격의 장단점
+    type = Column(String(50), nullable=False)   # 지원 동기/성격의 장단점
     version = Column(Integer, nullable=False)
     created_date = Column(DateTime, nullable=False, default=datetime.now())
     content = Column(Text, nullable=False, default="")

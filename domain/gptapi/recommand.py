@@ -126,9 +126,9 @@ def recommand_cover_letter(type, user, answer):
     if type == "지원동기":
         question = question_list[0]
     elif type == "성장배경":
-        question = question_list[0]
+        question = question_list[1]
     elif type == "성격의장단점":
-        question = question_list[0]
+        question = question_list[2]
 
     model = "gpt-4o-mini"
     
