@@ -77,7 +77,9 @@ def get_user_resume(db: Session, user_email):
 
 # 유저 별 자기소개서 추가
 def get_user_cover_letter(db: Session, user_email):
-    # 1: 지원동기: Motivation for Application / 2: 성장배경: Background and Growth / 3: 성격의 장단점: Strengths and Weaknesses of Personality
+    # 1: 지원동기: Motivation for Application
+    # 2: 성장배경: Background and Growth
+    # 3: 성격의 장단점: Strengths and Weaknesses of Personality
     motivation = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "1")).order_by(desc(UserCoverLetter.version)).first()
     growth = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "2")).order_by(desc(UserCoverLetter.version)).first()
     personality = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "3")).order_by(desc(UserCoverLetter.version)).first()

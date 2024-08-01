@@ -15,6 +15,7 @@ class Settings():
   OCR_API_URL = os.environ.get("OCR_API_URL")
   OCR_SECRET_KEY = os.environ.get("OCR_SECRET_KEY")
   OCR_TEMPLET_IDS = os.environ.get("OCR_TEMPLET_IDS")
+  GPT_API_KEY = os.environ.get("GPT_API_KEY")
 
 
 @lru_cache

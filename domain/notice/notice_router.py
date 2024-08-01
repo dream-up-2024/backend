@@ -21,5 +21,13 @@ def get_notice(db: Session = Depends(get_db)):
 
 @router.get("/{user_email}", status_code=200)
 def get_notice_by_user(user_email: str, db: Session = Depends(get_db)):
-    # notice_crud.create_notice_list(db=db)
-    print("200")
+    notice =  notice_crud.get_recommand_notice(db=db, user_email=user_email)
+
+    if not notice:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect user_email",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    return notice
