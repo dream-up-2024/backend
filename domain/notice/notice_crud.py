@@ -36,23 +36,23 @@ def get_recommand_notice(db: Session, user_email):
     #     return False
 
 
-# def create_notice_list(db: Session):
-#     notices = pd.read_csv(f'/Users/ryeon/Documents/Project/dacon/data_store/notice_20240731_2058_v3.csv', encoding='utf-8-sig').fillna("")
-    
-#     for index, row in notices.iterrows():
-#         data = row.to_dict()
-#         db_notice = Notice(
-#             company=data['company'],
-#             title=data['title'],
-#             job_type=data['job_type'],
-#             url=data['url'],
-#             work_experience=data['work_experience'],
-#             education=data['education'],
-#             address1=data['region'],
-#             address2=data['txt'],
-#             working_hour=data['working_hour'],
-#             deadline=data['deadline'],
-#         )
-#         db.add(db_notice)
+def create_notice_list(db: Session):
+    # notices = pd.read_csv(f'/Users/ryeon/Documents/Project/dacon/data_store/notice_20240731_2058_v3.csv', encoding='utf-8-sig').fillna("")
+    notices = pd.read_csv(f'/Users/ryeon/Documents/Project/dacon/data_store/work_data/final_20240729.csv', encoding='utf-8-sig')
+    for index, row in notices.iterrows():
+        data = row.to_dict()
+        db_notice = Notice(
+            company=data['office'],
+            title=data['title'],
+            job_type=data['main_category'],
+            url="https://www.work.go.kr" + data['url'],
+            work_experience=data['career'],
+            education=data['education'],
+            address1=data['address'].split(" ")[0][:2],
+            address2=data['address'].split(" ")[1],
+            working_hour=data['working_day'],
+            deadline=data['deadline'],
+        )
+        db.add(db_notice)
 
-#     db.commit()
+    db.commit()

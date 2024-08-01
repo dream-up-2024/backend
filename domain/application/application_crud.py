@@ -122,7 +122,6 @@ def create_user_cover_letter(db: Session, cover_letter_create: UserCoverLetterCr
     
     return final_cover_letter
 
-
 # 유저 별 이력서 내용 반환
 def get_user_resume(db: Session, user_email):
     resume = db.query(UserResume).filter(UserResume.user_email == user_email).order_by(desc(UserResume.version)).first()

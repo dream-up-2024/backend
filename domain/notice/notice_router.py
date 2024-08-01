@@ -16,6 +16,11 @@ router = APIRouter(
     prefix="/api/notice",
 )
 
+@router.get("/create", status_code=200)
+def get_notice(db: Session = Depends(get_db)):
+    return notice_crud.create_notice_list(db=db)
+    
+
 @router.get("", status_code=200)
 def get_notice(db: Session = Depends(get_db)):
     return notice_crud.get_notice_all(db=db)
