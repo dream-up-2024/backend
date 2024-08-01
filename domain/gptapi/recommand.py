@@ -104,9 +104,8 @@ def recommand_cover_letter(type, user, answer):
     text += f"questio={question}\n"
     text += f"answer={answer}"
 
-    print(text)
-
     # 답변 요청
     gpt = GptAPI(model, client)
     msg = gpt.get_message(f"{text}\n")
+    # print(msg)
     return msg

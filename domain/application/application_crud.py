@@ -52,7 +52,6 @@ def create_user_resume(db: Session, resume_create: UserResumeCreate, user_email)
     except:
         version = 1
 
-    print(f"{version} = {resume_create}")
     db_resume = UserResume(user_email=user_email,
                            version=version,
                            content=resume_create.content)
@@ -65,7 +64,6 @@ def create_user_resume(db: Session, resume_create: UserResumeCreate, user_email)
 
     recommand_job= recommand.start_recommand_job(recommand_based_data)
 
-    print(recommand_job)
     db_user.recommand_job_1 = recommand_job[0]
     db_user.recommand_job_2 = recommand_job[1]
     db_user.recommand_job_3 = recommand_job[2]
@@ -82,7 +80,6 @@ def create_user_cover_letter(db: Session, cover_letter_create: UserCoverLetterCr
 
     db_user = db.query(User).filter(User.email == user_email).one()
     recommand_based_data = check_data_by_user(db, db_user)
-    print(recommand_based_data)
     recommand_based_data.pop('user_cover_letter')
     # user_info = {
     #         "birth": user.birth,
@@ -118,7 +115,6 @@ def create_user_cover_letter(db: Session, cover_letter_create: UserCoverLetterCr
 
     recommand_job = recommand.start_recommand_job(recommand_based_data)
 
-    print(recommand_job)
     db_user.recommand_job_1 = recommand_job[0]
     db_user.recommand_job_2 = recommand_job[1]
     db_user.recommand_job_3 = recommand_job[2]
@@ -132,13 +128,28 @@ def get_user_resume(db: Session, user_email):
     resume = db.query(UserResume).filter(UserResume.user_email == user_email).order_by(desc(UserResume.version)).first()
     return resume
 
-# 유저 별 자기소개서 추가
+# 유저 별 자기소개서 내용 반환
 def get_user_cover_letter(db: Session, user_email):
     # 1: 지원동기: Motivation for Application
     # 2: 성장배경: Background and Growth
     # 3: 성격의 장단점: Strengths and Weaknesses of Personality
-    motivation = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "1")).order_by(desc(UserCoverLetter.version)).first()
-    growth = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "2")).order_by(desc(UserCoverLetter.version)).first()
-    personality = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "3")).order_by(desc(UserCoverLetter.version)).first()
+    motivation = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "지원동기")).order_by(desc(UserCoverLetter.version)).first()
+    growth = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "성장배경")).order_by(desc(UserCoverLetter.version)).first()
+    personality = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "성격의장단점")).order_by(desc(UserCoverLetter.version)).first()
 
-    return [motivation, growth, personality]
+    # return [motivation, growth, personality]
+    return [len(motivation), len(growth), len(personality)]
+
+# 유저 별 자기소개서 내용 반환 - 타입별
+def get_user_cover_letter_by_type(db: Session, user_email, type):
+    # 1: 지원동기: Motivation for Application
+    # 2: 성장배경: Background and Growth
+    # 3: 성격의 장단점: Strengths and Weaknesses of Personality
+    if type == 1:
+        data = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "지원동기")).order_by(desc(UserCoverLetter.version)).first()
+    elif type == 2:
+        data = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "성장배경")).order_by(desc(UserCoverLetter.version)).first()
+    elif data == 3:
+        data = db.query(UserCoverLetter).filter(and_(UserCoverLetter.user_email == user_email, UserCoverLetter.type == "성격의장단점")).order_by(desc(UserCoverLetter.version)).first()
+
+    return data

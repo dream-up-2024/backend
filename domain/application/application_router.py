@@ -41,15 +41,23 @@ def cover_letter_create(user_email: str,
 @router.get("/resume/{user_email}", status_code=200)
 def resume_get(user_email: str, db: Session = Depends(get_db)):
     data = application_crud.get_user_resume(db=db, user_email=user_email)
-    return data
 
+    return data
 
 # email="ryeonk"
 # 자기소개서 반환
 @router.get("/cover-letter/{user_email}", status_code=200)
 def cover_letter_get(user_email: str, db: Session = Depends(get_db)):
     data = application_crud.get_user_cover_letter(db=db, user_email=user_email)
+    print(data)
     return data
+
+# 자기소개서 반환 - 타입별
+@router.get("/cover-letter/{type}/{user_email}", status_code=200)
+def cover_letter_get(type: int, user_email: str, db: Session = Depends(get_db)):
+    data = application_crud.get_user_cover_letter_by_type(db=db, user_email=user_email, type=type)
+    # print(data)
+    return data.content
 
 
 # 지원서 반환
